@@ -21,63 +21,17 @@
       <link rel="Shortcut Icon" type="images/x-icon" href="../images/fav.ico">
       <link rel="stylesheet" href="css/main.css"><!--CDN link for  TweenMax-->
       <script src="http://cdnjs.cloudflare.com/ajax/libs/mobile-detect/0.4.3/mobile-detect.min.js"></script>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+      <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
       <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
-      <script src="https://code.createjs.com/preloadjs-0.6.1.min.js"></script>
-      <script src="../js/load.js"></script>
-      <script src="../js/app.js"></script>
+      <script src="http://code.createjs.com/preloadjs-0.6.1.min.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.5.1/dat.gui.js"></script>
     </head>
   </html>
-  <body class="l-index">
-    <div class="l-wrap"> 
-      <nav itemscope itemtype="http://schema.org/SiteNavigationElement" class="nav">
-        <div class="l-container">
-          <div class="nav-bd">
-            <h1 class="nav-logo"><a href="index.html" alt="LOGO" title="LOGO">LOGO</a></h1>
-            <div class="nav-btn">
-              <div class="one"></div>
-              <div class="two"></div>
-              <div class="three"></div>
-              <div class="abc"></div>
-              <div class="bbc44"></div>
-            </div>
-            <div role="navigation" class="nav-menu">
-              <ul class="clearfix">
-                <li class="nav-item nav-item--iscurrent"><a href="index.html" alt="項目" itemprop="url" title="項目"><span>項目</span></a></li>
-                <li class="nav-item"><a href="page.html" alt="項目" itemprop="url" title="項目"><span>項目</span></a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
-      <div class="l-fb">
-        <div class="l-container">
-          <div class="fb-box">
-            <div data-href="#" data-layout="button_count" data-action="like" data-show-faces="false" data-share="true" class="fb-like"> </div>
-          </div>
-        </div>
-      </div>
-      <div class="l-main">
-        <section class="rule">
-          <div class="l-container"></div>
-        </section>
-      </div>
-    </div>
-    <div class="l-footer footer">
-      <div class="l-container">
-        <p>footer</p>
-      </div>
-    </div>
-    <div class="fb-root"></div>
+  <body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r77/three.js"></script>
+    <script src="http://threejs.org/examples/js/controls/OrbitControls.js"></script>
+    <script src="js/Detector.js"></script>
+    <script src="js/chroma.min.js"></script>
+    <script src="js/app.js"></script>
   </body>
-  <script type="text/javascript">
-    (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s);
-        js.id = id;
-        js.src = "//connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v2.4&appId=262477160615577";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-  </script>
 </html>

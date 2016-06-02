@@ -75,7 +75,7 @@
         var ctx = canvas.getContext('2d');
 
         var img = new Image();
-        img.src = "../images/demo2.png";
+        img.src = "../images/demo.jpg";
         img.onload = function () {
             // draw on canvas
             ctx.drawImage(img, 0, 0);
@@ -87,17 +87,7 @@
 
             var output = [];
             for (var x = 0; x < depth; x++) {
-
                 for (var z = 0; z < width; z++) {
-                    colors.push(new THREE.Color(
-                        'rgb('+ ([
-                            pixel.data[(x*4) + z * depth * 4],
-                            pixel.data[(x*4)+1 + z * depth * 4],
-                            pixel.data[(x*4)+2 + z * depth * 4]
-                        ].join(','))+')'
-                    ));
-
-                    // colors.push(new THREE.Color('rgba(255,255,255)'));
                     // get pixel
                     // since we're grayscale, we only need one element
                     //每張圖取出來的px資料，是代表rgba的256色陣列
@@ -107,13 +97,9 @@
                     var vertex = new THREE.Vector3(x * spacingX, yValue , z * spacingZ);
                     geom.vertices.push(vertex);
 
+
                 }
             }
-            geom.colors = colors;
-
-
-
-
 
 
 
@@ -188,61 +174,62 @@
             v.velocity = Math.random();
         });
 
+        var psMat = new THREE.PointsMaterial();
         
         var loader = new THREE.TextureLoader();
+
         
-
-        var psMat = new THREE.PointsMaterial();
-        psMat.vertexColors = THREE.VertexColors;
-        // psMat.blending = THREE.AdditiveBlending;
-        // psMat.transparent = true;
-        // psMat.alphaTest = 0.8;
-
-        var ps = new THREE.Points(geom, psMat);
-        ps.sortParticles = true;
-        // ps.rotation.x = Math.PI / 2;
-
-        ps.translateX(206);
-        ps.translateY(206);
-        scene.add(ps);
-
-        for (var i = 0; i < geom.vertices.length; i++) {
-            avgVertexNormals.push(new THREE.Vector3(0, 0, 0));
-            avgVertexCount.push(0);
-        }
-
-        // first add all the normals 
-        // 可以把每個 F 想成組合成3d物件的許多三角型
-        geom.faces.forEach(function (f) {
+        loader.load( '../images/ps_ball.png', function ( texture ) {
+            psMat.blending = THREE.AdditiveBlending;
+            psMat.transparent = true;
+            psMat.alphaTest = 0.8;
             
-            //取得三個頂點的法向量
-            var vA = f.vertexNormals[0];
-            var vB = f.vertexNormals[1];
-            var vC = f.vertexNormals[2];
+            var ps = new THREE.Points(geom, psMat);
+            ps.sortParticles = true;
+            // ps.rotation.x = Math.PI / 2;
+            
+            ps.translateX(206);
+            ps.translateY(206);
+            scene.add(ps);
 
-            // update the count
-            // 將index計數 例如 avgVertexCount[128] +=1  先把所有出現過的座標計數
-            // 要注意f.a f.b f.c 是 index 
-            // 其目的是用來減少頂點的座標存取的資訊，所以會有重複的座標
-            avgVertexCount[f.a] += 1; 
-            avgVertexCount[f.b] += 1;
-            avgVertexCount[f.c] += 1;
+            for (var i = 0; i < geom.vertices.length; i++) {
+                avgVertexNormals.push(new THREE.Vector3(0, 0, 0));
+                avgVertexCount.push(0);
+            }
 
-            // 將對應index的方向量值給加進去 作向量的加總
-            avgVertexNormals[f.a].add(vA);
-            avgVertexNormals[f.b].add(vB);
-            avgVertexNormals[f.c].add(vC);
+            // first add all the normals 
+            // 可以把每個 F 想成組合成3d物件的許多三角型
+            geom.faces.forEach(function (f) {
+                
+                //取得三個頂點的法向量
+                var vA = f.vertexNormals[0];
+                var vB = f.vertexNormals[1];
+                var vC = f.vertexNormals[2];
 
-        });
+                // update the count
+                // 將index計數 例如 avgVertexCount[128] +=1  先把所有出現過的座標計數
+                // 要注意f.a f.b f.c 是 index 
+                // 其目的是用來減少頂點的座標存取的資訊，所以會有重複的座標
+                avgVertexCount[f.a] += 1; 
+                avgVertexCount[f.b] += 1;
+                avgVertexCount[f.c] += 1;
 
-        // 算出每個向量的平均值
-        // then calculate the average
-        for (var i = 0; i < avgVertexNormals.length; i++) {
-            avgVertexNormals[i].divideScalar(avgVertexCount[i]);
-        }
+                // 將對應index的方向量值給加進去 作向量的加總
+                avgVertexNormals[f.a].add(vA);
+                avgVertexNormals[f.b].add(vB);
+                avgVertexNormals[f.c].add(vC);
 
-        // call the render function
-        render();
+            });
+
+            // 算出每個向量的平均值
+            // then calculate the average
+            for (var i = 0; i < avgVertexNormals.length; i++) {
+                avgVertexNormals[i].divideScalar(avgVertexCount[i]);
+            }
+
+            // call the render function
+            render();
+        } );
 
     }
 
