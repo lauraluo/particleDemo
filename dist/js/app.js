@@ -82,6 +82,7 @@
             var pixel = ctx.getImageData(0, 0, width, depth);
             // console.log(pixel.data.length );//1048576
             //data長度為 128 取RGBA陣列中的A data長度為 512*512*4 其中的4代表每px的rgba
+            var matColors = math.multiply(math.ones(512, 512), '');
 
             geom = new THREE.Geometry;
 
@@ -89,13 +90,19 @@
             for (var x = 0; x < depth; x++) {
 
                 for (var z = 0; z < width; z++) {
-                    colors.push(new THREE.Color(
-                        'rgb('+ ([
-                            pixel.data[(x*4) + z * depth * 4],
-                            pixel.data[(x*4)+1 + z * depth * 4],
-                            pixel.data[(x*4)+2 + z * depth * 4]
-                        ].join(','))+')'
-                    ));
+                    matColors._data[z][x] = 'rgb('+ ([
+                        pixel.data[(x*4) + z * depth * 4],
+                        pixel.data[(x*4)+1 + z * depth * 4],
+                        pixel.data[(x*4)+2 + z * depth * 4]
+                    ].join(','))+')';
+
+                    // colors.push(new THREE.Color(
+                    //     'rgb('+ ([
+                    //         pixel.data[(x*4) + z * depth * 4],
+                    //         pixel.data[(x*4)+1 + z * depth * 4],
+                    //         pixel.data[(x*4)+2 + z * depth * 4]
+                    //     ].join(','))+')'
+                    // ));
 
                     // colors.push(new THREE.Color('rgba(255,255,255)'));
                     // get pixel
@@ -109,6 +116,10 @@
 
                 }
             }
+
+            math.forEach(matColors, function(value) {
+                colors.push(new THREE.Color(value));
+            });
             geom.colors = colors;
 
 
