@@ -7,7 +7,6 @@
     var geom;
 
     var control;
-    var scale = chroma.scale(['#6cffc6', '#95f4ff', '#e5ff89']).domain([0, 128]);
 
     var avgVertexNormals = [];
     var avgVertexCount = [];
@@ -51,7 +50,7 @@
             this.implode = function () {
                 doExplode = false;
             }
-            this.scale = 0.02;
+            this.scale = 0.1;
         };
         addControls(control);
 
@@ -96,13 +95,6 @@
                         pixel.data[(x*4)+2 + z * depth * 4]
                     ].join(','))+')';
 
-                    // colors.push(new THREE.Color(
-                    //     'rgb('+ ([
-                    //         pixel.data[(x*4) + z * depth * 4],
-                    //         pixel.data[(x*4)+1 + z * depth * 4],
-                    //         pixel.data[(x*4)+2 + z * depth * 4]
-                    //     ].join(','))+')'
-                    // ));
 
                     // colors.push(new THREE.Color('rgba(255,255,255)'));
                     // get pixel
@@ -123,11 +115,12 @@
             geom.colors = colors;
 
 
+            geom.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI / 2));
+            geom.applyMatrix(new THREE.Matrix4().makeRotationZ(-Math.PI / 2));
 
 
 
-
-
+            //制作面
             // we create a rectangle between four vertices, and we do
             // that as two triangles.
             for (var z = 0; z < depth - 1; z++) {
@@ -143,10 +136,6 @@
 
                     var face1 = new THREE.Face3(a, b, d);
                     var face2 = new THREE.Face3(d, c, a);
-                    //face裡代表的是上面取出512*512中 面的組成 順序 abcd代表的是點的index
-                    //利用for迴圈將所有的點連在一起，並用三個頂點中最高的點為其上色
-                    face1.color = new THREE.Color(scale(getHighPoint(geom, face1)).hex());
-                    face2.color = new THREE.Color(scale(getHighPoint(geom, face2)).hex())
 
                     geom.faces.push(face1);
                     geom.faces.push(face2);
@@ -154,8 +143,7 @@
             }
 
 
-            geom.applyMatrix(new THREE.Matrix4().makeRotationX(Math.PI / 2));
-            geom.applyMatrix(new THREE.Matrix4().makeRotationZ(-Math.PI / 2));
+
 
             geom.computeVertexNormals();
             geom.computeFaceNormals();
@@ -167,18 +155,6 @@
 
 
 
-
-
-
-            // var mesh = new THREE.Mesh(geom, new THREE.MeshLambertMaterial({
-            //     vertexColors: THREE.FaceColors,
-            //     color: 0x666666,
-            //     shading: THREE.NoShading
-            // }));
-            // mesh.translateX(-xMax / 2);
-            // mesh.translateZ(-zMax / 2);
-            // scene.add(mesh);
-            // mesh.name = 'valley';
         };
 
     }
@@ -260,7 +236,7 @@
     function explode(outwards) {
 
 
-        var dir = outwards === true ? 1 : -1;
+        var dir = outwards === true ? -1 : 1;
 
         var count = 0;
         geom.vertices.forEach(function (v) {
@@ -279,7 +255,7 @@
         var gui = new dat.GUI();
         gui.add(controlObject, 'explode');
         gui.add(controlObject, 'implode');
-        gui.add(controlObject, 'scale', 0, 1).step(0.01);
+        gui.add(controlObject, 'scale', 0, 2).step(0.01);
     }
 
     function render() {
